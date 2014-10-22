@@ -1,4 +1,4 @@
-<module xmlns="urn:jboss:module:1.0" name="org.rhq.metrics.clients.wildflySender">
+<module xmlns="urn:jboss:module:1.0" name="org.rhq.metrics.wildfly-monitor">
     <resources>
         <resource-root path="clients-common-0.2.3-SNAPSHOT.jar"/>
         <resource-root path="scheduler-0.0.6-SNAPSHOT.jar"/>
@@ -11,7 +11,7 @@
         <resource-root path="okhttp-2.0.0.jar"/>
         <resource-root path="okio-1.0.0.jar"/>
         <resource-root path="okhttp-urlconnection-2.0.0.jar"/>
-        <resource-root path="wildfly-sender.jar"/>
+        <resource-root path="wildfly-monitor.jar"/>
     </resources>
 
     <dependencies>

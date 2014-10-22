@@ -20,7 +20,8 @@
     <version.wildfly>8.1.0.Final</version.wildfly>
     <version.junit>4.11</version.junit>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <module.name>wildflyMonitor</module.name>
+
+      <rhq-metric.version>0.2.3-SNAPSHOT</rhq-metric.version>
   </properties>
 
   <build>
@@ -190,7 +191,7 @@
     <dependency>
       <groupId>org.rhq.metrics</groupId>
       <artifactId>clients-common</artifactId>
-      <version>${project.version}</version>
+      <version>${rhq-metric.version}</version>
     </dependency>
     <dependency>
       <groupId>org.wildfly</groupId>

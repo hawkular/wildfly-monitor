@@ -1,1 +1,1 @@
-wildflyMonitor.extension.SubsystemExtension
+org.rhq.wfly.monitor.extension.SubsystemExtension

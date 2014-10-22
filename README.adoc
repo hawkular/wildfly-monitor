@@ -1,4 +1,4 @@
-= WildFlySender
+= WildFly Monitor
 
 This is a module to be deployed into WildFlyAS and which then takes
 measurements from the WildFly model and sends them to the RHQ-Metrics server
@@ -8,11 +8,10 @@ http://localhost:8080 , which can be configured in `subsystem.xml` as shown belo
 
 == Installation
 
-First build the `client-commons` module located next to this module. Then
-build the source with:
+First build the module with:
 
 ----
-$ mvn install
+$ mvn clean install
 ----
 
 
@@ -21,7 +20,7 @@ end of the `extensions` section:
 
 [source,xml]
 ----
-        <extension module="org.rhq.metrics.clients.wildflySender"/>  (1)
+        <extension module="org.rhq.metrics.wildfly-monitor"/>  (1)
     </extensions>
 ----
 
@@ -29,7 +28,7 @@ and at the end of the profile section goes the subsystem definition:
 
 [source,xml]
 ----
-        <subsystem xmlns="urn:org.rhq.metrics:wildflySender:1.0">
+        <subsystem xmlns="urn:org.rhq.metrics:wildfly-monitor:1.0">
 
             <storage-adapter
                     name="rhq"
@@ -65,6 +64,6 @@ Copy the module into the server before starting it:
 [source,shell]
 ----
 $ cd $WILDFLY
-$ unzip $RHQMSRC/clients/wildfly-sender/target/wildfly-sender-module.zip
+$ unzip $RHQMSRC/clients/wildfly-sender/target/wildfly-monitor-module.zip
 ----
 
