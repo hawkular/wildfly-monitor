@@ -19,6 +19,7 @@
         <metric.scheduler.version>0.0.6-SNAPSHOT</metric.scheduler.version>
         <version.wildfly>8.1.0.Final</version.wildfly>
         <version.junit>4.11</version.junit>
+        <version.guava>18.0</version.guava>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <wildfly.version>8.1.0.Final</wildfly.version>
         <rhq-metric.version>0.2.3-SNAPSHOT</rhq-metric.version>
@@ -189,6 +190,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${version.guava}</version>
+        </dependency>
         <dependency>
             <groupId>org.rhq.metrics</groupId>
             <artifactId>clients-common</artifactId>
