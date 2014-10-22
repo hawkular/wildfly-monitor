@@ -45,12 +45,12 @@
             <useTransitiveFiltering>true</useTransitiveFiltering>
             <outputDirectory>modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main</outputDirectory>
             <includes>
-                <include>org.wildfly.metrics:scheduler</include>
                 <include>io.dropwizard.metrics:metrics-core</include>
                 <include>com.google.guava:guava</include>
                 <include>org.influxdb:influxdb-java</include>
                 <include>com.squareup.retrofit</include>
                 <include>com.google.code.gson</include>
+                <include>com.google.guava:guava</include>
                 <include>com.squareup.okhttp:okhttp</include>
                 <include>com.squareup.okio:okio</include>
                 <include>com.squareup.okhttp:okhttp-urlconnection</include>
