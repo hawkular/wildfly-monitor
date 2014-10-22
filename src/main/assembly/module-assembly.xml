@@ -24,32 +24,16 @@
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
-
-      <!--  <fileSet>
-            <directory>${project.basedir}/src/main/resources/config</directory>
-            <outputDirectory>standalone/configuration/</outputDirectory>
-            <includes>
-                <include>standalone-cassandra.xml</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>${project.basedir}/src/main/resources/config</directory>
-            <outputDirectory>domain/configuration/</outputDirectory>
-            <includes>
-                <include>cassandra-domain.xml</include>
-                <include>cassandra-host.xml</include>
-            </includes>
-        </fileSet>-->
         <fileSet>
             <directory>${project.basedir}/target/</directory>
-            <outputDirectory>modules/system/layers/base/org/rhq/metrics/clients/wildflySender/main</outputDirectory>
+            <outputDirectory>modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main</outputDirectory>
             <includes>
-                <include>wildfly-sender.jar</include>
+                <include>wildfly-monitor.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/src/main/resources/module/main</directory>
-            <outputDirectory>modules/system/layers/base/org/rhq/metrics/clients/wildflySender/main</outputDirectory>
+            <outputDirectory>modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main</outputDirectory>
             <includes>
                 <include>module.xml</include>
             </includes>
@@ -59,7 +43,7 @@
         <dependencySet>
             <useTransitiveDependencies>true</useTransitiveDependencies>
             <useTransitiveFiltering>true</useTransitiveFiltering>
-            <outputDirectory>modules/system/layers/base/org/rhq/metrics/clients/wildflySender/main</outputDirectory>
+            <outputDirectory>modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main</outputDirectory>
             <includes>
                 <include>org.wildfly.metrics:scheduler</include>
                 <include>io.dropwizard.metrics:metrics-core</include>

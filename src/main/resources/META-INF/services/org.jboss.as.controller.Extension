@@ -1,1 +1,1 @@
-wildflyMonitor.extension.SubsystemExtension
+org.rhq.metrics.clients.wildflyMonitor.extension.SubsystemExtension

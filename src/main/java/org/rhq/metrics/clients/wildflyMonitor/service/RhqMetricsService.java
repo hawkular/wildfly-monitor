@@ -51,7 +51,7 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
     private final InjectedValue<ModelController> modelControllerValue = new InjectedValue<>();
     private final InjectedValue<ServerEnvironment> serverEnvironmentValue = new InjectedValue<>();
 
-    public static final ServiceName SERVICE_NAME = ServiceName.JBOSS.append("rhq-metrics", "sender");
+    public static final ServiceName SERVICE_NAME = ServiceName.JBOSS.append("rhq", "wildfly-monitor");
 
     public RhqMetricsService(ModelNode config) {
 

@@ -1,4 +1,4 @@
-<subsystem xmlns="urn:org.rhq.metrics:wildflySender:1.0">
+<subsystem xmlns="urn:org.rhq.metrics:wildfly-monitor:1.0">
 
     <storage-adapter
             name="rhq"

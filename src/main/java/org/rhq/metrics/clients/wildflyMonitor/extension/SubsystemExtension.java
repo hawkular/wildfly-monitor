@@ -20,12 +20,12 @@ public class SubsystemExtension implements Extension {
     /**
      * The name space used for the {@code subsystem} element
      */
-    public static final String NAMESPACE = "urn:org.rhq.metrics:wildflySender:1.0";
+    public static final String NAMESPACE = "urn:org.rhq.metrics:wildfly-monitor:1.0";
 
     /**
      * The name of our subsystem within the model.
      */
-    public static final String SUBSYSTEM_NAME = "rhq-metrics-sender";
+    public static final String SUBSYSTEM_NAME = "wildfly-monitor";
 
     /**
      * The parser used for parsing our subsystem.
