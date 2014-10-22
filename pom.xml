@@ -159,6 +159,38 @@
             </build>
         </profile>
 
+        <profile>
+            <!-- this profile activates plugin that installs module + sets subsystem to WildFly instance -->
+            <id>install-wf</id>
+            <activation>
+                <property>
+                    <name>install-wf</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                         <groupId>org.jboss.plugins</groupId>
+                         <artifactId>wildfly-extension-maven-plugin</artifactId>
+                         <version>0.1-SNAPSHOT</version>
+                         <configuration>
+                             <moduleZip>${project.build.directory}/${project.artifactId}-module.zip</moduleZip>
+                             <jbossHome>${jboss.home}</jbossHome>
+                         </configuration>
+                         <executions>
+                             <execution>
+                                 <id>build-dist</id>
+                                 <phase>install</phase>
+                                 <goals>
+                                    <goal>deploy</goal>
+                                 </goals>
+                            </execution>
+                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
 
     <dependencyManagement>
@@ -259,7 +291,15 @@
         </repository>
     </repositories>
 
-    <distributionManagement>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>clojars</id>
+        <name>clojars</name>
+        <url>https://clojars.org/repo</url>
+      </pluginRepository>
+    </pluginRepositories>
+
+  <distributionManagement>
 
         <snapshotRepository>
             <id>jboss-snapshots-repository</id>
