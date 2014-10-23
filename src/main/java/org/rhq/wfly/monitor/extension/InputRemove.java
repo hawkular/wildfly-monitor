@@ -14,11 +14,11 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
  * StepHandler for removing a metric
  * @author Heiko W. Rupp
  */
-public class MetricRemove extends AbstractRemoveStepHandler {
+public class InputRemove extends AbstractRemoveStepHandler {
 
-    public static final MetricRemove INSTANCE = new MetricRemove();
+    public static final InputRemove INSTANCE = new InputRemove();
 
-    private MetricRemove() {
+    private InputRemove() {
 
     }
 

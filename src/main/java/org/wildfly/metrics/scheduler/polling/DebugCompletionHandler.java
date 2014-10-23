@@ -1,10 +1,10 @@
 package org.wildfly.metrics.scheduler.polling;
 
-import org.wildfly.metrics.scheduler.storage.Sample;
+import org.wildfly.metrics.scheduler.storage.DataPoint;
 
 public class DebugCompletionHandler implements Scheduler.CompletionHandler {
     @Override
-    public void onCompleted(Sample sample) {
+    public void onCompleted(DataPoint sample) {
         System.out.println(sample.getTask().getAttribute() + " > "+ sample.getValue());
     }
 

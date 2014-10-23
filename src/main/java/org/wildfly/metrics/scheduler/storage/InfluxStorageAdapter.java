@@ -39,16 +39,16 @@ public class InfluxStorageAdapter implements StorageAdapter {
     }
 
     @Override
-    public void store(Set<Sample> samples) {
+    public void store(Set<DataPoint> datapoints) {
 
         try {
 
-            Serie[] series = new Serie[samples.size()];
+            Serie[] series = new Serie[datapoints.size()];
             int i=0;
-            for (Sample sample : samples) {
-                Serie dataPoint = new Serie.Builder(sample.getTask().getAttribute())
-                        .columns("sample")
-                        .values(sample.getValue())
+            for (DataPoint datapoint : datapoints) {
+                Serie dataPoint = new Serie.Builder(datapoint.getTask().getAttribute())
+                        .columns("datapoint")
+                        .values(datapoint.getValue())
                         .build();
 
                 series[i] = dataPoint;

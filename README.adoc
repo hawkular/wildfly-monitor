@@ -5,67 +5,78 @@ image:https://travis-ci.org/rhq-project/wildfly-monitor.svg?branch=master["Build
 This is a module to be deployed into WildFlyAS and which then takes
 measurements from the WildFly model and sends them to the RHQ-Metrics server
 
+== Prerequisites
+
+=== Wildfly 8.1.0
+
+Get and install Wildfly 8.1.0: http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip
+
+It's currently been tested against WF 8.1.0 and the default server configuration (standalone-monitor.xml) is configured for WF 8.
+But apart from that there should be no reason to not use it on WF 9.
+
 Currently the location of the RHQ Metrics Server defaults to
 http://localhost:8080 , which can be configured in `subsystem.xml` as shown below.
 
-== Installation
+== Build & Install
 
-First build the module with:
+Build the top level project:
 
 ----
 $ mvn clean install
 ----
 
+This will also create a wildfly-monitor-module.zip, that can be installed on Wildfly:
 
-Add the following to `$SERVER/standalone/configuration/standalone.xml` at the
-end of the `extensions` section:
+`unzip target/wildfly-monitor-module.zip -d $WILDFLY_HOME`
 
-[source,xml]
-----
-        <extension module="org.rhq.metrics.wildfly-monitor"/>  (1)
-    </extensions>
-----
+This will add an additional module that contains the monitor extension and subsystem:
 
-and at the end of the profile section goes the subsystem definition:
+`modules/system/layers/base/org/rhq/metrics/wildfly-monitor/`
 
-[source,xml]
-----
-        <subsystem xmlns="urn:org.rhq.metrics:wildfly-monitor:1.0">
+== Package Contents
 
-            <storage-adapter
-                    name="rhq"
-                    url="http://localhost:8080/rhq-metrics/metrics" db="wildfly"/>
+The following contents will be installed when you unpack the wildfly-monitor-module.zip:
 
-            <server-monitor name="default" enabled="true" num-threads="2">
+<pre>
+ modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main/module.xml (1)
+ modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main/*.jar (2)
+ standalone/configuration/standalone-monitor.xml (3)
+ domain/configuration/monitor-domain.xml (4)
+ domain/configuration/monitor-host.xml (5)
+</pre>
 
-                <metric name="heap"
-                        seconds="20"
-                        resource="/core-service=platform-mbean/type=memory"
-                        attribute="heap-memory-usage#used"/>
+<ol>
+    <li> The module descriptor
+    <li> Required libraries to run the monitor on Wildfly
+    <li> An example configuration for standalone servers
+    <li> An example configuration for managed domains
+    <li> An example host configuration
+</ol>
 
-                <metric name="non-heap"
-                        seconds="20"
-                        resource="/core-service=platform-mbean/type=memory"
-                        attribute="non-heap-memory-usage#used"/>
+## Server Configuration Profiles
 
-                <metric name="thread-count"
-                        minutes="1"
-                        resource="/core-service=platform-mbean/type=threading"
-                        attribute="thread-count"/>
+The wildfly-monitor-module.zip server profiles for both standalone and domain mode that can be used to start a pre-configured Wildfly instance:
 
-            </server-monitor>
+### Standalone Mode
 
-            <diagnostics
-                    name="console"
-                    enabled="true" seconds="10"/>
-        </subsystem>
-----
+`./bin/standalone.sh -c standalone-monitor.xml -b 127.0.0.1`
 
-Copy the module into the server before starting it:
+### Domain Mode
 
-[source,shell]
-----
-$ cd $WILDFLY
-$ unzip $RHQMSRC/clients/wildfly-sender/target/wildfly-monitor-module.zip
-----
+`./bin/domain.sh --domain-config=monitor-domain.xml --host-config=monitor-host.xml -b 127.0.0.1`
 
+
+## Get In touch
+
+The best way to reach out and discuss the cassandra subsystem is currently the Wildfly mailing list and/or the Chat Room:
+
+- Mailing List: https://lists.fedorahosted.org/mailman/listinfo/rhq-devel
+- IRC: irc://freenode.org/#rhq
+
+## License
+
+- http://www.apache.org/licenses/LICENSE-2.0.html
+
+## Resources
+- https://docs.jboss.org/author/display/WFLY8/Documentation
+- http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html

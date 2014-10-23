@@ -12,7 +12,7 @@ import com.codahale.metrics.Timer;
 import org.wildfly.metrics.scheduler.config.Address;
 import org.wildfly.metrics.scheduler.config.Interval;
 import org.wildfly.metrics.scheduler.polling.Task;
-import org.wildfly.metrics.scheduler.storage.Sample;
+import org.wildfly.metrics.scheduler.storage.DataPoint;
 import org.wildfly.metrics.scheduler.storage.StorageAdapter;
 
 import java.io.PrintStream;
@@ -64,12 +64,12 @@ public class StorageReporter extends ScheduledReporter {
 
         if (!gauges.isEmpty()) {
 
-            Set<Sample> samples = new HashSet<>(gauges.size());
+            Set<DataPoint> samples = new HashSet<>(gauges.size());
             for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
                 Gauge<Integer> gauge = entry.getValue();
 
                 samples.add(
-                        new Sample(
+                        new DataPoint(
                                 new Task("foo", "bar", Address.apply("service=metric-scheduler"), entry.getKey(), null, Interval.EACH_SECOND),
                                 gauge.getValue()
                         )
@@ -80,10 +80,10 @@ public class StorageReporter extends ScheduledReporter {
 
         if (!counters.isEmpty()) {
 
-            Set<Sample> samples = new HashSet<>(counters.size());
+            Set<DataPoint> samples = new HashSet<>(counters.size());
             for (Map.Entry<String, Counter> entry : counters.entrySet()) {
                 samples.add(
-                        new Sample(
+                        new DataPoint(
                                 new Task("foo", "bar", Address.apply("service=metric-scheduler"), entry.getKey(), null, Interval.EACH_SECOND),
                                 entry.getValue().getCount()
                         )
@@ -111,11 +111,11 @@ public class StorageReporter extends ScheduledReporter {
 
         if (!meters.isEmpty()) {
 
-            Set<Sample> samples = new HashSet<>(meters.size());
+            Set<DataPoint> samples = new HashSet<>(meters.size());
             for (Map.Entry<String, Meter> entry : meters.entrySet()) {
                 Meter meter = entry.getValue();
                 samples.add(
-                        new Sample(
+                        new DataPoint(
                                 new Task("foo", "bar", Address.apply("service=metric-scheduler"), entry.getKey(), null, Interval.EACH_SECOND),
                                 meter.getOneMinuteRate()
                         )
@@ -126,13 +126,13 @@ public class StorageReporter extends ScheduledReporter {
 
         if (!timers.isEmpty()) {
 
-            Set<Sample> samples = new HashSet<>(timers.size());
+            Set<DataPoint> samples = new HashSet<>(timers.size());
 
             for (Map.Entry<String, Timer> entry : timers.entrySet()) {
                 Timer timer = entry.getValue();
 
                 samples.add(
-                        new Sample(
+                        new DataPoint(
                                 new Task("foo", "bar", Address.apply("service=metric-scheduler"), entry.getKey(), null, Interval.EACH_SECOND),
                                 timer.getSnapshot().get75thPercentile()
                         )

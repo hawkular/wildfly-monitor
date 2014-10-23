@@ -14,10 +14,10 @@ import org.rhq.wfly.monitor.service.RhqMetricsService;
  * Handler that restarts the service on attribute changes
  * @author Heiko W. Rupp
  */
-public class MetricWriteAttributeHandler extends RestartParentWriteAttributeHandler {
+public class InputWriteAttributeHandler extends RestartParentWriteAttributeHandler {
 
-    public MetricWriteAttributeHandler(AttributeDefinition... definitions) {
-        super(MetricDefinition.METRIC, definitions);
+    public InputWriteAttributeHandler(AttributeDefinition... definitions) {
+        super(InputDefinition.DATA_INPUT, definitions);
     }
 
     @Override

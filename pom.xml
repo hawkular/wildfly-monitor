@@ -22,7 +22,7 @@
         <version.guava>18.0</version.guava>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <wildfly.version>8.1.0.Final</wildfly.version>
-        <rhq-metric.version>0.2.3.20141020-M4</rhq-metric.version>
+        <rhq-metric.version>0.2.3-SNAPSHOT</rhq-metric.version>
         <codehale.version>3.1.0</codehale.version>
     </properties>
 

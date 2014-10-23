@@ -40,9 +40,9 @@ class SubsystemParser
                                 .setXmlElementName(MonitorDefinition.MONITOR)
                                 .addAttributes(MonitorDefinition.ATTRIBUTES)
                             .addChild(
-                                builder(MetricDefinition.INSTANCE)
-                                        .setXmlElementName(MetricDefinition.METRIC)
-                                        .addAttributes(MetricDefinition.ATTRIBUTES)
+                                builder(InputDefinition.INSTANCE)
+                                        .setXmlElementName(InputDefinition.DATA_INPUT)
+                                        .addAttributes(InputDefinition.ATTRIBUTES)
                             )
                 )
                 .addChild(

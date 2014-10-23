@@ -82,7 +82,7 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
                 // monitoring setup
                 schedulerConfig.setSchedulerThreads(monitorCfg.get("num-threads").asInt());
 
-                List<Property> metrics = monitorCfg.get("metric").asPropertyList();
+                List<Property> metrics = monitorCfg.get("data-input").asPropertyList();
                 for (Property metric : metrics) {
                     ModelNode metricCfg = metric.getValue();
 

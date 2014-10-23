@@ -12,7 +12,6 @@ import org.wildfly.metrics.scheduler.config.Configuration;
 import org.wildfly.metrics.scheduler.diagnose.Diagnostics;
 import org.wildfly.metrics.scheduler.polling.Task;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -41,15 +40,15 @@ public class RHQStorageAdapter implements StorageAdapter {
     }
 
     @Override
-    public void store(Set<Sample> samples) {
+    public void store(Set<DataPoint> datapoints) {
         HttpPost post = new HttpPost(config.getStorageUrl());
         try {
             List<SingleMetric> metrics = new ArrayList<>();
 
-            for (Sample sample : samples) {
-                Task task = sample.getTask();
+            for (DataPoint datapoint : datapoints) {
+                Task task = datapoint.getTask();
                 String source = task.getHost()+"."+task.getServer()+"."+task.getAttribute();
-                metrics.add(new SingleMetric(source, sample.getTimestamp(), sample.getValue()));
+                metrics.add(new SingleMetric(source, datapoint.getTimestamp(), datapoint.getValue()));
             }
 
 

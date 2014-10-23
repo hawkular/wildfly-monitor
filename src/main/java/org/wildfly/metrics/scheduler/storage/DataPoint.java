@@ -6,12 +6,12 @@ import org.wildfly.metrics.scheduler.polling.Task;
  * @author Heiko Braun
  * @since 13/10/14
  */
-public final class Sample {
+public final class DataPoint {
     private Task task;
     private long timestamp;
     private double value;
 
-    public Sample(Task task, double value) {
+    public DataPoint(Task task, double value) {
         this.task = task;
         this.timestamp = System.currentTimeMillis();
         this.value = value;
