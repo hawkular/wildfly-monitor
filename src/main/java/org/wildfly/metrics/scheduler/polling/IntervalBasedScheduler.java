@@ -27,7 +27,7 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 import org.wildfly.metrics.scheduler.ModelControllerClientFactory;
 import org.wildfly.metrics.scheduler.diagnose.Diagnostics;
-import org.wildfly.metrics.scheduler.storage.Sample;
+import org.wildfly.metrics.scheduler.storage.DataPoint;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -203,7 +203,7 @@ public class IntervalBasedScheduler extends AbstractScheduler {
                             value = data.get(RESULT).asDouble();
                         }
 
-                        completionHandler.onCompleted(new Sample(task, value));
+                        completionHandler.onCompleted(new DataPoint(task, value));
                         i++;
                     }
 

@@ -21,7 +21,7 @@
  */
 package org.wildfly.metrics.scheduler.polling;
 
-import org.wildfly.metrics.scheduler.storage.Sample;
+import org.wildfly.metrics.scheduler.storage.DataPoint;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public interface Scheduler {
      * Callback for completed tasks
      */
     interface CompletionHandler {
-        void onCompleted(Sample sample);
+        void onCompleted(DataPoint sample);
         void onFailed(Throwable e);
     }
 }

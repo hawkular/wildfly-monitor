@@ -18,13 +18,13 @@ public class BufferedStorageDispatcher implements Scheduler.CompletionHandler {
     private static final int BUFFER_SIZE = 100;
     private final StorageAdapter storageAdapter;
     private final Diagnostics diagnostics;
-    private final BlockingQueue<Sample> queue;
+    private final BlockingQueue<DataPoint> queue;
     private final Worker worker;
 
     public BufferedStorageDispatcher(StorageAdapter storageAdapter, Diagnostics diagnostics) {
         this.storageAdapter = storageAdapter;
         this.diagnostics = diagnostics;
-        this.queue = new ArrayBlockingQueue<Sample>(BUFFER_SIZE);
+        this.queue = new ArrayBlockingQueue<DataPoint>(BUFFER_SIZE);
         this.worker = new Worker(queue);
     }
 
@@ -37,7 +37,7 @@ public class BufferedStorageDispatcher implements Scheduler.CompletionHandler {
     }
 
     @Override
-    public void onCompleted(Sample sample) {
+    public void onCompleted(DataPoint sample) {
         if(queue.remainingCapacity()>0) {
             //System.out.println(sample.getTask().getAttribute()+" > "+sample.getValue());
             diagnostics.getStorageBufferSize().inc();
@@ -54,10 +54,10 @@ public class BufferedStorageDispatcher implements Scheduler.CompletionHandler {
     }
 
     public class Worker extends Thread {
-        private final BlockingQueue<Sample> queue;
+        private final BlockingQueue<DataPoint> queue;
         private boolean keepRunning = true;
 
-        public Worker(BlockingQueue<Sample> queue) {
+        public Worker(BlockingQueue<DataPoint> queue) {
             this.queue = queue;
         }
 
@@ -66,8 +66,8 @@ public class BufferedStorageDispatcher implements Scheduler.CompletionHandler {
                 while ( keepRunning ) {
 
                     // batch processing
-                    Sample sample = queue.take();
-                    Set<Sample> samples = new HashSet<>();
+                    DataPoint sample = queue.take();
+                    Set<DataPoint> samples = new HashSet<>();
                     queue.drainTo(samples, MAX_BATCH_SIZE);
                     samples.add(sample);
 
