@@ -7,17 +7,17 @@
 
   <server-monitor name="default" enabled="true" num-threads="2">
 
-    <metric name="heap"
+    <data-input name="heap"
       seconds="20"
       resource="/core-service=platform-mbean/type=memory"
       attribute="heap-memory-usage#used"/>
 
-    <metric name="non-heap"
+    <data-input name="non-heap"
       seconds="20"
       resource="/core-service=platform-mbean/type=memory"
       attribute="non-heap-memory-usage#used"/>
 
-    <metric name="thread-count"
+    <data-input name="thread-count"
       minutes="1"
       resource="/core-service=platform-mbean/type=threading"
       attribute="thread-count"/>

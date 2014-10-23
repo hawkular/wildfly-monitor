@@ -43,7 +43,7 @@ public class MonitorDefinition extends PersistentResourceDefinition {
 
     @Override
     protected List<? extends PersistentResourceDefinition> getChildren() {
-        return Arrays.asList(MetricDefinition.INSTANCE);
+        return Arrays.asList(InputDefinition.INSTANCE);
     }
 
     @Override

@@ -14,17 +14,17 @@ import java.util.List;
  * Add a metric to the system
  * @author Heiko W. Rupp
  */
-public class MetricAdd extends AbstractAddStepHandler {
+public class InputAdd extends AbstractAddStepHandler {
 
-    public static final MetricAdd INSTANCE = new MetricAdd();
+    public static final InputAdd INSTANCE = new InputAdd();
 
-    private MetricAdd() {
+    private InputAdd() {
 
     }
 
     @Override
     protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
-        for (AttributeDefinition def : MetricDefinition.ATTRIBUTES) {
+        for (AttributeDefinition def : InputDefinition.ATTRIBUTES) {
             def.validateAndSet(operation, model);
         }
     }

@@ -15,11 +15,11 @@ import org.jboss.dmr.ModelType;
  * Definition of a single metric
  * @author Heiko W. Rupp
  */
-public class MetricDefinition extends PersistentResourceDefinition {
+public class InputDefinition extends PersistentResourceDefinition {
 
-    public static final MetricDefinition INSTANCE = new MetricDefinition();
+    public static final InputDefinition INSTANCE = new InputDefinition();
 
-    public static final String METRIC  = "metric";
+    public static final String DATA_INPUT = "data-input";
 
     static final SimpleAttributeDefinition RESOURCE = new SimpleAttributeDefinitionBuilder("resource", ModelType.STRING,false)
         .build();
@@ -44,17 +44,17 @@ public class MetricDefinition extends PersistentResourceDefinition {
             HOURS
     };
 
-    private MetricDefinition() {
-        super(PathElement.pathElement(METRIC),
-            SubsystemExtension.getResourceDescriptionResolver(MonitorDefinition.MONITOR, METRIC),
-            MetricAdd.INSTANCE,
-            MetricRemove.INSTANCE
+    private InputDefinition() {
+        super(PathElement.pathElement(DATA_INPUT),
+            SubsystemExtension.getResourceDescriptionResolver(MonitorDefinition.MONITOR, DATA_INPUT),
+            InputAdd.INSTANCE,
+            InputRemove.INSTANCE
             );
     }
 
     @Override
     public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
-        MetricWriteAttributeHandler handler = new MetricWriteAttributeHandler(ATTRIBUTES);
+        InputWriteAttributeHandler handler = new InputWriteAttributeHandler(ATTRIBUTES);
 
         for (AttributeDefinition attr : ATTRIBUTES) {
             resourceRegistration.registerReadWriteAttribute(attr, null, handler);

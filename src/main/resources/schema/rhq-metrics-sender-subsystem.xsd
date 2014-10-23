@@ -38,7 +38,7 @@
     <!-- definition of individual metrics -->
     <xs:complexType name="serverMonitorType">
         <xs:sequence>
-            <xs:element name="metric" type="metricType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="data-input" type="inputType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" use="required" type="xs:string"/>
         <xs:attribute name="num-threads" default="2" use="required" type="xs:int"/>
@@ -51,7 +51,7 @@
     </xs:complexType-->
 
     <!-- definition of individual metrics -->
-    <xs:complexType name="metricType">
+    <xs:complexType name="inputType">
         <xs:attribute name="name" use="required" type="xs:string"/>
         <xs:attribute name="resource" type="xs:string" use="required"/>
         <xs:attribute name="attribute" type="xs:string"/>
