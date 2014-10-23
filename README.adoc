@@ -77,4 +77,4 @@ The best way to reach out and discuss the cassandra subsystem is currently the W
 
 ## Resources
 - https://docs.jboss.org/author/display/WFLY8/Documentation
-- http://www.datastax.com/documentation/cassandra/2.0/cassandra/gettingStartedCassandraIntro.html
+
