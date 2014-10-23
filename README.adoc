@@ -66,7 +66,7 @@ The wildfly-monitor-module.zip server profiles for both standalone and domain mo
 
 ## Get In touch
 
-The best way to reach out and discuss the cassandra subsystem is currently the Wildfly mailing list and/or the Chat Room:
+The best way to reach out and discuss the monitor subsystem is the RHQ  mailing list and/or the Chat Room:
 
 - Mailing List: https://lists.fedorahosted.org/mailman/listinfo/rhq-devel
 - IRC: irc://freenode.org/#rhq
