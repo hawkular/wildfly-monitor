@@ -38,6 +38,21 @@
                 <include>module.xml</include>
             </includes>
         </fileSet>
+        <fileSet>
+                 <directory>${project.basedir}/src/main/resources/config</directory>
+                 <outputDirectory>standalone/configuration/</outputDirectory>
+                 <includes>
+                     <include>standalone-monitor.xml</include>
+                 </includes>
+             </fileSet>
+             <fileSet>
+                 <directory>${project.basedir}/src/main/resources/config</directory>
+                 <outputDirectory>domain/configuration/</outputDirectory>
+                 <includes>
+                     <include>monitor-domain.xml</include>
+                     <include>monitor-host.xml</include>
+                 </includes>
+             </fileSet>
     </fileSets>
     <dependencySets>
         <dependencySet>
