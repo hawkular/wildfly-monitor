@@ -37,21 +37,19 @@ This will add an additional module that contains the monitor extension and subsy
 
 The following contents will be installed when you unpack the wildfly-monitor-module.zip:
 
-<pre>
+`
  modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main/module.xml (1)
  modules/system/layers/base/org/rhq/metrics/wildfly-monitor/main/*.jar (2)
  standalone/configuration/standalone-monitor.xml (3)
  domain/configuration/monitor-domain.xml (4)
  domain/configuration/monitor-host.xml (5)
-</pre>
+`
 
-<ol>
-    <li> The module descriptor
-    <li> Required libraries to run the monitor on Wildfly
-    <li> An example configuration for standalone servers
-    <li> An example configuration for managed domains
-    <li> An example host configuration
-</ol>
+. The module descriptor
+. Required libraries to run the monitor on Wildfly
+. An example configuration for standalone servers
+. An example configuration for managed domains
+. An example host configuration
 
 ## Server Configuration Profiles
 
