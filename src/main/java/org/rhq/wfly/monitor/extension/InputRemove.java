@@ -27,9 +27,5 @@ public class InputRemove extends AbstractRemoveStepHandler {
                                   ModelNode model) throws OperationFailedException {
         final PathAddress address = PathAddress.pathAddress(operation.get(OP_ADDR));
 
-        String metricName = address.getLastElement().getValue();
-        RhqMetricsService service = (RhqMetricsService) context.getServiceRegistry(true).getService(RhqMetricsService.SERVICE_NAME).getService();
-        service.removeMetric(metricName);
-
     }
 }

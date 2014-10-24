@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <subsystem xmlns="urn:org.rhq.metrics:wildfly-monitor:1.0">
 
-  <storage-adapter
-    name="rhq"
-    url="http://localhost:8080/rhq-metrics/metrics" db="wildfly"/>
+    <storage-adapter
+            name="rhq"
+            url="http://localhost:8080/rhq-metrics/metrics" db="wildfly"/>
 
-  <server-monitor name="default" enabled="true" num-threads="2">
+    <server-monitor name="default" enabled="true" num-threads="2">
 
-    <data-input name="heap"
-      seconds="20"
-      resource="/core-service=platform-mbean/type=memory"
-      attribute="heap-memory-usage#used"/>
+        <data-input name="heap"
+                    seconds="20"
+                    resource="/core-service=platform-mbean/type=memory"
+                    attribute="heap-memory-usage#used"/>
 
-    <data-input name="non-heap"
-      seconds="20"
-      resource="/core-service=platform-mbean/type=memory"
-      attribute="non-heap-memory-usage#used"/>
+        <data-input name="non-heap"
+                    seconds="20"
+                    resource="/core-service=platform-mbean/type=memory"
+                    attribute="non-heap-memory-usage#used"/>
 
-    <data-input name="thread-count"
-      minutes="1"
-      resource="/core-service=platform-mbean/type=threading"
-      attribute="thread-count"/>
+        <data-input name="thread-count"
+                    minutes="1"
+                    resource="/core-service=platform-mbean/type=threading"
+                    attribute="thread-count"/>
 
-  </server-monitor>
+    </server-monitor>
 
-  <diagnostics
-    name="console"
-    enabled="true" seconds="10"/>
+    <diagnostics
+            name="console"
+            enabled="true" seconds="10"/>
 </subsystem>

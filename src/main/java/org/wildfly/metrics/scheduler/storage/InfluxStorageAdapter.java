@@ -5,6 +5,7 @@ import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Serie;
 import org.wildfly.metrics.scheduler.config.Configuration;
 import org.wildfly.metrics.scheduler.diagnose.Diagnostics;
+import org.wildfly.metrics.scheduler.polling.Task;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +22,7 @@ public class InfluxStorageAdapter implements StorageAdapter {
     private String dbName;
     private Diagnostics diagnostics;
     private Configuration config;
+    private DefaultKeyResolution keyResolution;
 
     @Override
     public void setConfiguration(Configuration config) {
@@ -31,6 +33,8 @@ public class InfluxStorageAdapter implements StorageAdapter {
                 config.getStoragePassword()
         );
         this.dbName = config.getStorageDBName();
+
+        this.keyResolution = new DefaultKeyResolution();
     }
 
     @Override
@@ -46,7 +50,10 @@ public class InfluxStorageAdapter implements StorageAdapter {
             Serie[] series = new Serie[datapoints.size()];
             int i=0;
             for (DataPoint datapoint : datapoints) {
-                Serie dataPoint = new Serie.Builder(datapoint.getTask().getAttribute())
+
+                Task task = datapoint.getTask();
+                String key = keyResolution.resolve(task);
+                Serie dataPoint = new Serie.Builder(key)
                         .columns("datapoint")
                         .values(datapoint.getValue())
                         .build();

@@ -41,12 +41,16 @@ class SubsystemAdd extends AbstractAddStepHandler {
 
         ModelNode subsystemConfig = Resource.Tools.readModel(context.readResource(PathAddress.EMPTY_ADDRESS));
 
+        // TODO: the root resource doesn't inlcude the runtime paramters, hence we cannot depict the host/server name & launch-type from it.
+        //ModelNode systemConfig = Resource.Tools.readModel(context.readResourceFromRoot(PathAddress.EMPTY_ADDRESS, false));
+
         // Add the service
         newControllers.add(
                 RhqMetricsService.createService(
                         context.getServiceTarget(),
                         verificationHandler,
-                        subsystemConfig)
+                        subsystemConfig
+                )
         );
     }
 }

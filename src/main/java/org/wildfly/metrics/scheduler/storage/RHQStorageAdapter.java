@@ -26,8 +26,13 @@ public class RHQStorageAdapter implements StorageAdapter {
 
     private Configuration config;
     private Diagnostics diagnostics;
-    private HttpClient httpclient = new DefaultHttpClient();
+    private final HttpClient httpclient;
+    private final DefaultKeyResolution keyResolution;
 
+    public RHQStorageAdapter() {
+        this.httpclient = new DefaultHttpClient();
+        this.keyResolution = new DefaultKeyResolution();
+    }
 
     @Override
     public void setConfiguration(Configuration config) {
@@ -47,8 +52,8 @@ public class RHQStorageAdapter implements StorageAdapter {
 
             for (DataPoint datapoint : datapoints) {
                 Task task = datapoint.getTask();
-                String source = task.getHost()+"."+task.getServer()+"."+task.getAttribute();
-                metrics.add(new SingleMetric(source, datapoint.getTimestamp(), datapoint.getValue()));
+                String key = keyResolution.resolve(task);
+                metrics.add(new SingleMetric(key, datapoint.getTimestamp(), datapoint.getValue()));
             }
 
 
