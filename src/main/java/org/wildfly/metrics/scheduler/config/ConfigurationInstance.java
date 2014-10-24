@@ -40,10 +40,10 @@ public class ConfigurationInstance implements Configuration {
     private String user;
     private String password;
 
-    private String storageUrl = "http://sandbox.influxdb.com:8086";
-    private String storageUser = "admin";
-    private String storagePassword = "password123";
-    private String storageDb = "wildfly";
+    private String storageUrl = null;
+    private String storageUser = null;
+    private String storagePassword = null;
+    private String storageDb = null;
     private String storageToken = null;
     private Storage storageAdapter = Storage.INFLUX;
 

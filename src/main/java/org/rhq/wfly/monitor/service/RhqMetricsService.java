@@ -1,5 +1,7 @@
 package org.rhq.wfly.monitor.service;
 
+import org.jboss.as.controller.ControlledProcessState;
+import org.jboss.as.controller.ControlledProcessStateService;
 import org.jboss.as.controller.ModelController;
 import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.ServiceVerificationHandler;
@@ -25,6 +27,8 @@ import org.wildfly.metrics.scheduler.config.Interval;
 import org.wildfly.metrics.scheduler.config.ResourceRef;
 import org.wildfly.security.manager.action.GetAccessControlContextAction;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -41,6 +45,12 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
  */
 public class RhqMetricsService implements Service<RhqMetricsService> {
 
+    private static final String LAUNCH_TYPE = "launch-type";
+    private static final String DOMAIN = "domain";
+    private static final String HOST = "host";
+    private static final String NAME = "name";
+    private static final String RESULT = "result";
+
     private Interval diagnosticsInterval;
     private boolean diagnosticsEnabled = false;
     private boolean enabled = false;
@@ -50,12 +60,14 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
 
     private final InjectedValue<ModelController> modelControllerValue = new InjectedValue<>();
     private final InjectedValue<ServerEnvironment> serverEnvironmentValue = new InjectedValue<>();
+    private final InjectedValue<ControlledProcessStateService> processStateValue = new InjectedValue<>();
 
     public static final ServiceName SERVICE_NAME = ServiceName.JBOSS.append("rhq", "wildfly-monitor");
+    private PropertyChangeListener serverStateListener;
 
     public RhqMetricsService(ModelNode config) {
 
-        // the wildfly scheduler config
+        // the actual scheduler config
         this.schedulerConfig = new ConfigurationInstance();
 
         Property storageAdapter = config.get("storage-adapter").asPropertyList().get(0);
@@ -75,9 +87,15 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
                 schedulerConfig.setStorageAdapter(Configuration.Storage.valueOf(storageAdapter.getName().toUpperCase()));
                 schedulerConfig.setStorageUrl(storageAdapterCfg.get("url").asString());
                 schedulerConfig.setStorageDb(storageAdapterCfg.get("db").asString());
-                schedulerConfig.setStorageUser(storageAdapterCfg.get("user").asString());
-                schedulerConfig.setStoragePassword(storageAdapterCfg.get("passsword").asString());
-                schedulerConfig.setStorageToken(storageAdapterCfg.get("token").asString());
+
+                if(storageAdapterCfg.hasDefined("user"))
+                    schedulerConfig.setStorageUser(storageAdapterCfg.get("user").asString());
+
+                if(storageAdapterCfg.hasDefined("password"))
+                    schedulerConfig.setStoragePassword(storageAdapterCfg.get("password").asString());
+
+                if(storageAdapterCfg.hasDefined("token"))
+                    schedulerConfig.setStorageToken(storageAdapterCfg.get("token").asString());
 
                 // monitoring setup
                 schedulerConfig.setSchedulerThreads(monitorCfg.get("num-threads").asInt());
@@ -141,6 +159,8 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
                         service.serverEnvironmentValue)
                 .addDependency(Services.JBOSS_SERVER_CONTROLLER, ModelController.class,
                         service.modelControllerValue)
+                .addDependency(ControlledProcessStateService.SERVICE_NAME, ControlledProcessStateService.class,
+                        service.processStateValue)
                 .addListener(verificationHandler)
                 .setInitialMode(ServiceController.Mode.ACTIVE)
                 .install();
@@ -148,63 +168,87 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
 
 
     @Override
-    public void start(StartContext startContext) throws StartException {
+    public void start(final StartContext startContext) throws StartException {
 
 
         if (this.enabled) {
 
-            final ThreadFactory threadFactory = new JBossThreadFactory(
-                    new ThreadGroup("RHQ-Metrics-threads"),
-                    Boolean.FALSE, null, "%G - %t", null, null,
-                    doPrivileged(GetAccessControlContextAction.getInstance()));
 
-            final ExecutorService executorService = Executors.newCachedThreadPool(threadFactory);
-            final ModelControllerClient client = modelControllerValue.getValue().createClient(executorService);
-
-            // create scheduler service
-            schedulerService = new org.wildfly.metrics.scheduler.Service(schedulerConfig, new ModelControllerClientFactory() {
+            // deferred startup: we have to wait until the server is running before we can monitor the subsystems (parallel service startup)
+            ControlledProcessStateService stateService = processStateValue.getValue();
+            serverStateListener = new PropertyChangeListener() {
                 @Override
-                public ModelControllerClient createClient() {
-                    return  modelControllerValue.getValue().createClient(executorService);
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if (ControlledProcessState.State.RUNNING.equals(evt.getNewValue())) {
+                        System.out.println("<< Start monitoring subsystems >>");
+                        startScheduler(startContext);
+                    }
                 }
-            });
-
-            // Get the server name from the runtime model
-            boolean isDomainMode = getStringAttribute(client, "launch-type", PathAddress.EMPTY_ADDRESS).equalsIgnoreCase("domain");
-
-            String hostName = null;
-            String serverName = null;
-
-            ServerEnvironment serverEnv = serverEnvironmentValue.getValue();
-            if(isDomainMode)
-            {
-                hostName = getStringAttribute(client, "local-host-name", PathAddress.EMPTY_ADDRESS);
-                serverName = serverEnv.getServerName();
-            }
-            else
-            {
-                hostName = serverEnv.getQualifiedHostName();
-                serverName = getStringAttribute(client, "name", PathAddress.EMPTY_ADDRESS);
-            }
-
-
-            // Create a http client
-            schedulerService.start(hostName, serverName);
-
-            // enabled diagnostics if needed
-            if(diagnosticsEnabled) {
-                schedulerService.reportEvery(diagnosticsInterval.getVal(), diagnosticsInterval.getUnit());
-            }
+            };
+            stateService.addPropertyChangeListener(serverStateListener);
 
         }
 
+    }
+
+    private void startScheduler(StartContext startContext) {
+
+        final ThreadFactory threadFactory = new JBossThreadFactory(
+                new ThreadGroup("RHQ-Metrics-threads"),
+                Boolean.FALSE, null, "%G - %t", null, null,
+                doPrivileged(GetAccessControlContextAction.getInstance()));
+
+        final ExecutorService executorService = Executors.newCachedThreadPool(threadFactory);
+        final ModelControllerClient client = modelControllerValue.getValue().createClient(executorService);
+
+
+        // create scheduler service
+        schedulerService = new org.wildfly.metrics.scheduler.Service(schedulerConfig, new ModelControllerClientFactory() {
+            @Override
+            public ModelControllerClient createClient() {
+                return  modelControllerValue.getValue().createClient(executorService);
+            }
+        });
+
+        // Get the server name from the runtime model
+        // TODO: this should be changed to OperationContext.readResourceFromRoot(...)
+        boolean isDomainMode = getAttribute(client, LAUNCH_TYPE).equalsIgnoreCase(DOMAIN);
+
+        String hostName = null;
+        String serverName = null;
+
+        if(isDomainMode)
+        {
+            hostName = getAttribute(client, HOST);
+            serverName = getAttribute(client, NAME);
+        }
+        else
+        {
+            hostName = "";
+            serverName = getAttribute(client, NAME);
+        }
+
+        // Create a http client
+        schedulerService.start(hostName, serverName);
+
+        // enabled diagnostics if needed
+        if(diagnosticsEnabled) {
+            schedulerService.reportEvery(diagnosticsInterval.getVal(), diagnosticsInterval.getUnit());
+        }
 
     }
 
     @Override
     public void stop(StopContext stopContext) {
+
+        // shutdown scheduler
         if(schedulerService!=null)
             schedulerService.stop();
+
+        // cleanup the state listener
+        if(serverStateListener!=null)
+            processStateValue.getValue().removePropertyChangeListener(serverStateListener);
+
     }
 
     @Override
@@ -213,32 +257,43 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
     }
 
     private String getStringAttribute(ModelControllerClient client, String attributeName, PathAddress path)  {
+        ModelNode result = getModelNode(client, attributeName, path);
+        return result.asString();
+    }
 
+    private ModelNode getModelNode(ModelControllerClient client, String attributeName, PathAddress address){
         try {
-            ModelNode result = getModelNode(client, attributeName, path);
-            return result.asString();
+            ModelNode request = new ModelNode();
+
+            if (address !=null) {
+
+                request.get(ADDRESS).set(address.toModelNode());
+            }
+
+            request.get(OP).set(READ_ATTRIBUTE_OPERATION);
+            request.get(NAME).set(attributeName);
+            ModelNode resultNode = client.execute(request);
+            // get the inner "result" -- should check for failure and so on...
+            resultNode = resultNode.get(RESULT);
+            return resultNode;
         } catch (IOException e) {
-            return "-null-";
+            throw new RuntimeException(e);
         }
     }
 
-    private ModelNode getModelNode(ModelControllerClient client, String attributeName, PathAddress address) throws IOException {
-        ModelNode request = new ModelNode();
-
-        if (address !=null) {
-
-            request.get(ADDRESS).set(address.toModelNode());
+    private String getAttribute(ModelControllerClient client, String attributeName) {
+        try {
+            ModelNode request = new ModelNode();
+            request.get(ADDRESS).setEmptyList();
+            request.get(OP).set(READ_ATTRIBUTE_OPERATION);
+            request.get(NAME).set(attributeName);
+            ModelNode resultNode = client.execute(request);
+            // get the inner "result" -- should check for failure and so on...
+            resultNode = resultNode.get(RESULT);
+            return resultNode.asString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        request.get(OP).set(READ_ATTRIBUTE_OPERATION);
-        request.get(NAME).set(attributeName);
-        ModelNode resultNode = client.execute(request);
-        // get the inner "result" -- should check for failure and so on...
-        resultNode = resultNode.get("result");
-        return resultNode;
     }
 
-    public void removeMetric(String metricName) {
-        // TODO
-    }
 }
