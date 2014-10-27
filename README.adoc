@@ -14,8 +14,11 @@ Get and install Wildfly 8.1.0: http://download.jboss.org/wildfly/8.1.0.Final/wil
 It's currently been tested against WF 8.1.0 and the default server configuration (standalone-monitor.xml) is configured for WF 8.
 But apart from that there should be no reason to not use it on WF 9.
 
-Currently the location of the RHQ Metrics Server defaults to
-http://localhost:8080 , which can be configured in `subsystem.xml` as shown below.
+=== RHQ Metrics
+
+["RHQ Metrics", link="https://github.com/rhq-project/rhq-metrics"] is not part of this module. It needs to be installed separately. Please consult the RHQ metrics documentation,
+how to install the core metric components and the REST services onto Wildfly 8.
+
 
 == Build & Install
 
