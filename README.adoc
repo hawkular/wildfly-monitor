@@ -3,7 +3,7 @@
 image:https://travis-ci.org/rhq-project/wildfly-monitor.svg?branch=master["Build Status", link="https://travis-ci.org/rhq-project/wildfly-monitor"]
 
 This is a module to be deployed into WildFlyAS and which then takes
-measurements from the WildFly model and sends them to the RHQ-Metrics server
+measurements from the WildFly model and sends them to a ["RHQ-Metrics server", "https://github.com/rhq-project/wildfly-monitor/wiki/RHQ" or ["InfluxDB", "https://github.com/rhq-project/wildfly-monitor/wiki/InfluxDB"]
 
 == Prerequisites
 
