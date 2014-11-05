@@ -24,6 +24,8 @@
         <wildfly.version>8.1.0.Final</wildfly.version>
         <rhq-metric.clients-common.version>0.2.4</rhq-metric.clients-common.version>
         <codehale.version>3.1.0</codehale.version>
+        <version.org.jboss.logging.jboss-logging>3.1.4.GA</version.org.jboss.logging.jboss-logging>
+        <version.org.jboss.logging.jboss-logging-tools>1.2.0.Final</version.org.jboss.logging.jboss-logging-tools>
     </properties>
 
     <build>
@@ -170,22 +172,22 @@
             <build>
                 <plugins>
                     <plugin>
-                         <groupId>org.jboss.plugins</groupId>
-                         <artifactId>wildfly-extension-maven-plugin</artifactId>
-                         <version>0.1-SNAPSHOT</version>
-                         <configuration>
-                             <moduleZip>${project.build.directory}/${project.artifactId}-module.zip</moduleZip>
-                             <jbossHome>${jboss.home}</jbossHome>
-                         </configuration>
-                         <executions>
-                             <execution>
-                                 <id>build-dist</id>
-                                 <phase>install</phase>
-                                 <goals>
+                        <groupId>org.jboss.plugins</groupId>
+                        <artifactId>wildfly-extension-maven-plugin</artifactId>
+                        <version>0.1-SNAPSHOT</version>
+                        <configuration>
+                            <moduleZip>${project.build.directory}/${project.artifactId}-module.zip</moduleZip>
+                            <jbossHome>${jboss.home}</jbossHome>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-dist</id>
+                                <phase>install</phase>
+                                <goals>
                                     <goal>deploy</goal>
-                                 </goals>
+                                </goals>
                             </execution>
-                         </executions>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -217,6 +219,31 @@
                 <artifactId>junit</artifactId>
                 <scope>test</scope>
                 <version>${version.junit}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging</artifactId>
+                <version>${version.org.jboss.logging.jboss-logging}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging-annotations</artifactId>
+                <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+                      projects that depend on this project.-->
+                <scope>provided</scope>
+                <optional>true</optional>
+                <version>${version.org.jboss.logging.jboss-logging-tools}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging-processor</artifactId>
+                <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+                      projects that depend on this project.-->
+                <scope>provided</scope>
+                <optional>true</optional>
+                <version>${version.org.jboss.logging.jboss-logging-tools}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -273,6 +300,22 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-annotations</artifactId>
+            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+                  projects that depend on this project.-->
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-processor</artifactId>
+            <!-- This is a compile-time dependency of this project, but is not needed at compile or runtime by other
+                  projects that depend on this project.-->
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 
@@ -292,14 +335,14 @@
     </repositories>
 
     <pluginRepositories>
-      <pluginRepository>
-        <id>clojars</id>
-        <name>clojars</name>
-        <url>https://clojars.org/repo</url>
-      </pluginRepository>
+        <pluginRepository>
+            <id>clojars</id>
+            <name>clojars</name>
+            <url>https://clojars.org/repo</url>
+        </pluginRepository>
     </pluginRepositories>
 
-  <distributionManagement>
+    <distributionManagement>
 
         <snapshotRepository>
             <id>jboss-snapshots-repository</id>
