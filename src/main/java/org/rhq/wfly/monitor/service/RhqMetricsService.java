@@ -20,6 +20,7 @@ import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.jboss.msc.value.InjectedValue;
 import org.jboss.threads.JBossThreadFactory;
+import org.rhq.wfly.monitor.extension.MonitorLogger;
 import org.wildfly.metrics.scheduler.ModelControllerClientFactory;
 import org.wildfly.metrics.scheduler.config.Configuration;
 import org.wildfly.metrics.scheduler.config.ConfigurationInstance;
@@ -64,6 +65,7 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
 
     public static final ServiceName SERVICE_NAME = ServiceName.JBOSS.append("rhq", "wildfly-monitor");
     private PropertyChangeListener serverStateListener;
+
 
     public RhqMetricsService(ModelNode config) {
 
@@ -180,7 +182,8 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
                 @Override
                 public void propertyChange(PropertyChangeEvent evt) {
                     if (ControlledProcessState.State.RUNNING.equals(evt.getNewValue())) {
-                        System.out.println("<< Start monitoring subsystems >>");
+
+                        MonitorLogger.LOGGER.infof("Starting monitoring subsystem");
                         startScheduler(startContext);
                     }
                 }
@@ -240,6 +243,8 @@ public class RhqMetricsService implements Service<RhqMetricsService> {
 
     @Override
     public void stop(StopContext stopContext) {
+
+        MonitorLogger.LOGGER.infof("Stopping monitoring subsystem");
 
         // shutdown scheduler
         if(schedulerService!=null)

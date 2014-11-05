@@ -25,7 +25,9 @@ import com.codahale.metrics.Timer;
 import org.jboss.as.controller.client.ModelControllerClient;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
+import org.rhq.wfly.monitor.extension.MonitorLogger;
 import org.wildfly.metrics.scheduler.ModelControllerClientFactory;
+import org.wildfly.metrics.scheduler.SchedulerLogger;
 import org.wildfly.metrics.scheduler.diagnose.Diagnostics;
 import org.wildfly.metrics.scheduler.storage.DataPoint;
 
@@ -66,7 +68,7 @@ public class IntervalBasedScheduler extends AbstractScheduler {
         this.executorService = Executors.newScheduledThreadPool(poolSize, new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
-                System.out.println("<< created new executor >>");
+                SchedulerLogger.LOGGER.debug("Creating new executor thread");
                 return new Thread(r);
             }
         });
@@ -82,8 +84,8 @@ public class IntervalBasedScheduler extends AbstractScheduler {
         // optimize task groups
         List<TaskGroup> groups = new IntervalGrouping().apply(tasks);
 
-        System.out.println("<< Number of Tasks: "+tasks.size()+" >>");
-        System.out.println("<< Number of Task Groups: "+groups.size()+" >>");
+        SchedulerLogger.LOGGER.infof("Number of tasks: %s", tasks.size());
+        SchedulerLogger.LOGGER.infof("Number of task groups: %s", groups.size());
 
         // populate connection pool
         for (int i = 0; i < poolSize; i++) {
