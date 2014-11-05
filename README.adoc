@@ -3,7 +3,7 @@
 image:https://travis-ci.org/rhq-project/wildfly-monitor.svg?branch=master["Build Status", link="https://travis-ci.org/rhq-project/wildfly-monitor"]
 
 This is a module to be deployed into WildFlyAS and which then takes
-measurements from the WildFly model and sends them to a ["RHQ-Metrics server", "https://github.com/rhq-project/wildfly-monitor/wiki/RHQ" or ["InfluxDB", "https://github.com/rhq-project/wildfly-monitor/wiki/InfluxDB"]
+measurements from the WildFly model and sends them to a https://github.com/rhq-project/wildfly-monitor/wiki/RHQ[RHQ-Metrics server] or https://github.com/rhq-project/wildfly-monitor/wiki/InfluxDB[InfluxDB]
 
 == Prerequisites
 
@@ -16,7 +16,7 @@ But apart from that there should be no reason to not use it on WF 9.
 
 === RHQ Metrics
 
-["RHQ Metrics", link="https://github.com/rhq-project/rhq-metrics"] is not part of this module. It needs to be installed separately. Please consult the RHQ metrics documentation,
+https://github.com/rhq-project/rhq-metrics[RHQ Metrics] is not part of this module. It needs to be installed separately. Please consult the RHQ metrics documentation,
 how to install the core metric components and the REST services onto Wildfly 8.
 
 
