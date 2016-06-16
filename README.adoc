@@ -1,3 +1,5 @@
+# ARCHIVED AND NO LONGER MAINTAINED
+
 = WildFly Monitor
 
 image:https://travis-ci.org/rhq-project/wildfly-monitor.svg?branch=master["Build Status", link="https://travis-ci.org/rhq-project/wildfly-monitor"]
